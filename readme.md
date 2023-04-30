@@ -20,8 +20,7 @@ Para inicializar la librería, debes instanciar la clase SarLib. La clase toma c
 Como segundo parametro esta el url (opcional). Este URL es para conectar con el API de SAR en caso de querer apuntar a otro destino que no sea el que es por defecto.
 
 ```js
-    const sar = new SarLib(
-        { 
+    const sar = new SarLib({
             uuid: 'xxx-xxx-xxx-xxx-xxx', 
             secretKey: 'secretKey'
         }, 'urlApi');
