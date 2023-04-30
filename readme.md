@@ -19,7 +19,7 @@ Para inicializar la librería, debes instanciar la clase SarLib. La clase toma c
  - url (opcional): URL de la API de SAR. Por defecto, es "https://500h-sar-dev.accentiostudios.com".
 
 ```js
-    const sar = new SarLib({ uuid: 'xxx-xxx-xxx-xxx-xxx', secretKey: 'secretKey', url: 'urlApi' });
+    const sar = new SarLib({ uuid: 'xxx-xxx-xxx-xxx-xxx', secretKey: 'secretKey'}, 'urlApi' );
 ```
 
 Después, puedes llamar al método init() para inicializar la librería. Este método toma como argumento una función de retorno que se ejecutará después de que se complete la inicialización. La función de retorno recibirá el objeto del usuario como argumento.
