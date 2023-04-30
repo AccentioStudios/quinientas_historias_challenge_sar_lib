@@ -80,3 +80,5 @@ Este proyecto es una iniciativa de 500Historias con la ayuda de Accentio Studios
 500Historias es un programa de transformación educativa que busca descubrir e impulsar nuevos talentos de la literatura, así como desarrollar habilidades como la creatividad, el pensamiento crítico y la colaboración en los jóvenes participantes.
 
 Accentio Studios es una empresa de desarrollo de software que ofrece soluciones innovadoras y de calidad para diversos sectores.
+
+Esta documentación fue generada usando GPT 3.5
