@@ -11,7 +11,7 @@ Para utilizar la librería, primero debes importar la libreria en tu proyecto. P
 
 Usando el CDN de Unpkg:
 ``` html
-    <script src="https://unpkg.com/@500historias/sarlib@1.0.3/dist/sarlib.min.js"></script>
+    <script src="https://unpkg.com/@500historias/sarlib@latest/dist/sarlib.min.js"></script>
 ```
 ### Inicializar la librería
 Para inicializar la librería, debes instanciar la clase SarLib. La clase toma como argumento un objeto de configuración con las siguientes propiedades:
