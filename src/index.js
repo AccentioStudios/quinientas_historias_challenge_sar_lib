@@ -1,7 +1,7 @@
 import Toastify from 'toastify-js'
 
 /**
- * SARLIB v1.0.0-beta.1
+ * SARLIB v1.0.0-beta
  * Clase para manejar todas las peticiones a la API del SAR
  * @param {object} config - Objeto con la configuracion de la API (uuid, secretKey)
  * @param {string} url - URL del api, en caso de no usar el default (optional)
