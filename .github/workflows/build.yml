@@ -24,13 +24,6 @@ jobs:
     - name: Build
       run: npm run build
 
-    # - name: Upload Artifact
-    #   uses: actions/upload-artifact@v3.1.2
-    #   with:
-    #     name: release-${{ github.run_number }}
-    #     path: dist/
-
-
     - name: Create Release
       uses: actions/create-release@v1
       id: create_release
@@ -38,7 +31,7 @@ jobs:
         draft: false
         prerelease: false
         release_name: ${{ steps.version.outputs.version }}
-        tag_name: v1.0.${{ github.run_number }}
+        tag_name: v1.0.0-beta+${{ github.run_number }}
         body_path: release_notes.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -48,7 +41,7 @@ jobs:
       with:
         draft: false
         files: ./dist/sarlib.min.js
-        tag_name: v1.0.${{ github.run_number }}
+        tag_name: v1.0.0-beta+${{ github.run_number }}
         body_path: release_notes.md
         token: ${{ github.token }}
 
@@ -58,9 +51,3 @@ jobs:
         keep_latest: 3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-        # upload_url: ${{ steps.create_release.outputs.upload_url }}
-        # asset_path: dist/
-        # asset_name: release-v1.0.${{ github.run_number }}.zip
-        # asset_content_type: application/gzip
