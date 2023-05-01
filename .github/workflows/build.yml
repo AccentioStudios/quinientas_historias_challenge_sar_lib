@@ -55,6 +55,6 @@ jobs:
     - name: Publish package on NPM 📦
       run: |
         echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
-        npm pack && npm publish *.tgz --access public
+        npm pack && npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
