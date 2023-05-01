@@ -1,4 +1,4 @@
-name: Build and Pre-Release
+name: Build and Release
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
       uses: softprops/action-gh-release@v0.1.15
       with:
         draft: false
-        prerelease: true
+        prerelease: false
         name: build-${{ github.run_number }}
         files: ./dist/sarlib.min.js
         tag_name: build-${{ github.run_number }}
