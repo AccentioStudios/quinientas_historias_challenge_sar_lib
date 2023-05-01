@@ -1,3 +1,5 @@
+### [1.0.7](https://github.com/AccentioStudios/quinientas_historias_challenge_sar_lib/compare/v1.0.6...v1.0.7) (2023-05-01)
+
 ### [1.0.6](https://github.com/AccentioStudios/quinientas_historias_challenge_sar_lib/compare/v1.0.5...v1.0.6) (2023-05-01)
 
 ### [1.0.5](https://github.com/AccentioStudios/quinientas_historias_challenge_sar_lib/compare/v1.0.2...v1.0.5) (2023-05-01)
