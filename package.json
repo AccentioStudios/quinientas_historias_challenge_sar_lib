@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
+    "prepublish": "npm run tsc",
     "publish": "npm publish --access public"
   },
   "keywords": [
@@ -12,7 +13,7 @@
     "package",
     "500Historias"
   ],
-  "author": "Accentio Studios",
+  "author": "Accentio Studios <hellodev@accentiostudios.com>",
   "license": "ISC",
   "dependencies": {
     "toastify-js": "^1.12.0"
