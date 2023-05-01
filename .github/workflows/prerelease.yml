@@ -31,7 +31,6 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN_ACTION }}
         git-message: 'chore(release): {version}'
-        preset: 'npm'
         tag-prefix: 'beta'
         output-file: 'CHANGELOG.md'
 
