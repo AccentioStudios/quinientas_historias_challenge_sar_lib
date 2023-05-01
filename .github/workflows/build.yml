@@ -34,7 +34,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        token: ${{ secrets.GB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
       with:
         draft: false
         prerelease: false
