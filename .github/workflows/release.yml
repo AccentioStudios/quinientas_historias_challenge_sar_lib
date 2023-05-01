@@ -23,6 +23,14 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Delete Older Releases
+      uses: actions/delete-package-versions@v4.1.1
+      with:
+        package-name: '@500historias/sarlib'
+        package-type: npm
+        min-versions-to-keep: 3
+        token: ${{ github.token }}
+
     - name: Publish Release
       uses: softprops/action-gh-release@v0.1.15
       with:
@@ -40,14 +48,6 @@ jobs:
     #     delete_tag_pattern: beta-*
     #   env:
     #     GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Delete Older Releases
-      uses: actions/delete-package-versions@v4.1.1
-      with:
-        package-name: '@500historias/sarlib'
-        package-type: npm
-        min-versions-to-keep: 3
-        token: ${{ github.token }}
     
     # - name: Publish package on NPM 📦
     #   run: npm publish --tag beta --access public
