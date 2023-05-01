@@ -24,11 +24,11 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: release-${{ github.run_number }}
-        path: dist/
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v3.1.2
+    #   with:
+    #     name: release-${{ github.run_number }}
+    #     path: dist/
 
 
     - name: Create Release
@@ -39,7 +39,7 @@ jobs:
         prerelease: false
         release_name: ${{ steps.version.outputs.version }}
         tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
+        body_path: release_notes.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
       # id: create_release
@@ -54,12 +54,12 @@ jobs:
       #   body_path: release_notes.md
 
 
-    - name: Publish Release
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: path/to/your/build/directory/*
-        asset_name: release-${{ github.run_number }}.zip
-        asset_content_type: application/zip
+    # - name: Publish Release
+    #   uses: actions/upload-release-asset@v1.0.1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: path/to/your/build/directory/*
+    #     asset_name: release-${{ github.run_number }}.zip
+    #     asset_content_type: application/zip
