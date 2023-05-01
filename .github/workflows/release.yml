@@ -24,33 +24,34 @@ jobs:
       run: npm run build
 
     - name: Delete Older Releases
-      uses: actions/delete-package-versions@v4.1.1
+      uses: dev-drprasad/delete-older-releases@v0.2.1
       with:
-        package-name: '@500historias/sarlib'
-        package-type: npm
-        min-versions-to-keep: 3
-        token: ${{ github.token }}
-
-    - name: Publish Release
-      uses: softprops/action-gh-release@v0.1.15
-      with:
-        draft: false
-        prerelease: false
-        files: ./dist/sarlib.min.js
-        tag_name: release-${{ github.run_number }}
-        body_path: release_notes.md
-        token: ${{ secrets.GITHUB_TOKEN }}
+        keep_latest: 3
+        delete_tag_pattern: beta-*
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
 
     # - name: Delete Older Releases
-    #   uses: dev-drprasad/delete-older-releases@v0.2.1
+    #   uses: actions/delete-package-versions@v4.1.1
     #   with:
-    #     keep_latest: 3
-    #     delete_tag_pattern: beta-*
-    #   env:
-    #     GITHUB_TOKEN: ${{ github.token }}
+    #     package-name: '@500historias/sarlib'
+    #     package-type: npm
+    #     min-versions-to-keep: 3
+    #     token: ${{ github.token }}
+
+    # - name: Publish Release
+    #   uses: softprops/action-gh-release@v0.1.15
+    #   with:
+    #     draft: false
+    #     prerelease: false
+    #     files: ./dist/sarlib.min.js
+    #     tag_name: release-${{ github.run_number }}
+    #     body_path: release_notes.md
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+
     
-    # - name: Publish package on NPM 📦
-    #   run: npm publish --tag beta --access public
-    #   env:
-    #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Publish package on NPM 📦
+      run: npm publish --tag beta --access public
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

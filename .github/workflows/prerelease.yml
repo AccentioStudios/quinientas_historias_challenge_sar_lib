@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'package.json'
+      - 'CHANGELOG.md'
 
 jobs:
   build:
@@ -12,6 +15,8 @@ jobs:
     steps:  
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v2
@@ -21,35 +26,48 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Bump version
+      uses: TriPSs/conventional-changelog-action@v3.18.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN_ACTION }}
+        git-message: 'chore(release): {version}'
+        preset: 'npm'
+        tag-prefix: 'beta'
+        output-file: 'CHANGELOG.md'
+
     - name: Build
       run: npm run build
-
-    - name: Delete Older Releases
-      uses: actions/delete-package-versions@v4.1.1
-      with:
-        package-name: '@500historias/sarlib'
-        min-versions-to-keep: 3
-        package-type: npm
-        delete-only-pre-release-versions: "true"
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Publish Pre-Release
-      uses: softprops/action-gh-release@v0.1.15
-      with:
-        draft: false
-        prerelease: true
-        files: ./dist/sarlib.min.js
-        tag_name: beta-${{ github.run_number }}
-        body_path: release_notes.md
-        token: ${{ github.token }}
 
     # - name: Delete Older Releases
     #   uses: dev-drprasad/delete-older-releases@v0.2.1
     #   with:
-    #     keep_latest: 3
+    #     keep_latest: 6
+    #     delete_tags: true
     #     delete_tag_pattern: beta-*
     #   env:
     #     GITHUB_TOKEN: ${{ github.token }}
+
+    # - name: Delete Older Releases
+    #   uses: actions/delete-package-versions@v4.1.1
+    #   with:
+    #     package-name: '@500historias/sarlib'
+    #     min-versions-to-keep: 3
+    #     package-type: npm
+    #     delete-only-pre-release-versions: "true"
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Publish Pre-Release
+      uses: softprops/action-gh-release@v0.1.15
+      if: ${{ steps.changelog.outputs.skipped == 'false' }}
+      with:
+        draft: false
+        prerelease: true
+        name: ${{ steps.changelog.outputs.tag }}
+        files: ./dist/sarlib.min.js
+        tag_name: ${{ steps.changelog.outputs.tag }}
+        body_path: CHANGELOG.md
+        token: ${{ github.token }}
+
 
     # - name: Publish package on NPM 📦
     #   run: npm publish --tag beta --access public
