@@ -26,7 +26,7 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: pipe-cd/actions-gh-release@v2.6.0
       env:
         GITHUB_TOKEN: ${{ secrets.GB_TOKEN }}
       with:
