@@ -1,6 +1,6 @@
 {
   "name": "@500historias/sarlib",
-  "version": "1.0.1",
+  "version": "1.0.0-beta.1",
   "description": "library for connecting an application to the SAR",
   "main": "index.js",
   "scripts": {
