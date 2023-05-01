@@ -55,4 +55,4 @@ jobs:
     - name: Publish package on NPM 📦
       run: npm pack && npm publish *.tgz --access public
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
