@@ -7,9 +7,11 @@ Esta librería tiene las siguientes dependencias:
 
 ## Uso
 ### Importar la librería
-Para utilizar la librería, primero debes importar la libreria desde el CDN de 500Historias
+Para utilizar la librería, primero debes importar la libreria en tu proyecto. Puedes hacerlo con el siguiente código:
+
+Usando el CDN de Unpkg:
 ``` html
-    <script src="https://500historias.com/libs/sarlib.min.js"></script>
+    <script src="https://unpkg.com/@500historias/sarlib@1.0.3/dist/sarlib.min.js"></script>
 ```
 ### Inicializar la librería
 Para inicializar la librería, debes instanciar la clase SarLib. La clase toma como argumento un objeto de configuración con las siguientes propiedades:
