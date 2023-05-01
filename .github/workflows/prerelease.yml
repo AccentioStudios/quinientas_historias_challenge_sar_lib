@@ -49,7 +49,7 @@ jobs:
         min-versions-to-keep: 3
         package-type: npm
         delete-only-pre-release-versions: "true"
-        token: ${{ github.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     # - name: Publish package on NPM 📦
     #   run: npm publish --tag beta --access public

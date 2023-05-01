@@ -31,7 +31,7 @@ jobs:
         files: ./dist/sarlib.min.js
         tag_name: release-${{ github.run_number }}
         body_path: release_notes.md
-        token: ${{ github.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # - name: Delete Older Releases
     #   uses: dev-drprasad/delete-older-releases@v0.2.1
