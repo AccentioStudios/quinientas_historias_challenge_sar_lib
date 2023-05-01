@@ -32,7 +32,8 @@ jobs:
     - name: Bump version
       uses: TriPSs/conventional-changelog-action@v3.18.0
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN_ACTION }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        preset: 'conventionalcommits'
         git-message: 'chore(release): {version}'
         tag-prefix: 'v'
         output-file: 'CHANGELOG.md'
