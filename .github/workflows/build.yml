@@ -46,12 +46,11 @@ jobs:
     - name: Publish Release
       uses: softprops/action-gh-release@v0.1.15
       with:
+        draft: false
         files: ./dist/sarlib.min.js
         tag_name: v1.0.${{ github.run_number }}
         body_path: release_notes.md
         token: ${{ github.token }}
-      env:
-        GITHUB_REPOSITORY: AccentioStudios/quinientas_historias_challenge_sar_lib
 
         # upload_url: ${{ steps.create_release.outputs.upload_url }}
         # asset_path: dist/
