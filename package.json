@@ -29,9 +29,9 @@
     "test": "node test/test.js",
     "pretest": "npm run build",
     "release": "release-it --ci --verbose",
-    "release:major": "release-it --major --ci --verbose",
-    "release:minor": "release-it --minor --ci --verbose",
-    "release:patch": "release-it --patch --ci --verbose"
+    "release:major": "release-it --increment major --ci --verbose",
+    "release:minor": "release-it --increment minor --ci --verbose",
+    "release:patch": "release-it --increment patch --ci --verbose"
   },
   "files": [
     "dist"
