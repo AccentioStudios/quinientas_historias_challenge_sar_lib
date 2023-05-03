@@ -11,7 +11,8 @@
     "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
   },
   "github": {
-    "release": true
+    "release": true,
+    "draft": false
   },
   "npm": {
     "publish": true,
