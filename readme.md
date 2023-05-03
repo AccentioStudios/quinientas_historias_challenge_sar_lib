@@ -2,8 +2,7 @@
 Esta es una librería para manejar peticiones a la API del SAR. Esta clase se puede utilizar para obtener información del usuario y para terminar un reto.
 
 ## Demo
-Puedes ver un demo de un juego usando la librería en el siguiente [https://accentiostudios.github.io/500h-2048/?userId=9999&testMode=true
-](aquí/).
+Puedes ver un demo de un juego usando la librería [aquí](https://accentiostudios.github.io/500h-2048/?userId=9999&testMode=true).
 ## Requisitos
 Esta librería tiene las siguientes dependencias:
  - Toastify-js
