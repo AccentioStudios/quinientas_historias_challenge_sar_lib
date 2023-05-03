@@ -11,13 +11,7 @@ on:
           - minor
           - major
         default: auto
-  # push:
-  #   branches:
-  #     - main
-  #   paths-ignore:
-  #     - 'package.json'
-  #     - 'CHANGELOG.md'
-
+        
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -55,41 +49,9 @@ jobs:
     - name: Run Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TYPE_ARG: ${{ fromJSON('{"auto":"", "patch":"--patch", "minor":"--minor", "major":"--major"}')[github.event.inputs.type] }}
-      run: npm run release --ci --verbose $TYPE_ARG
-      
-
-    # - name: Bump version
-    #   uses: TriPSs/conventional-changelog-action@v3.18.0
-    #   with:
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-    #     preset: 'conventionalcommits'
-    #     git-message: 'chore(release): {version}'
-    #     tag-prefix: 'v'
-    #     output-file: 'CHANGELOG.md'
-    #     skip-on-empty: false
-
-    # - name: Publish Release
-    #   uses: softprops/action-gh-release@v0.1.15
-    #   with:
-    #     draft: false
-    #     prerelease: false
-    #     name: build-${{ github.run_number }}
-    #     files: ./dist/sarlib.min.js
-    #     tag_name: build-${{ github.run_number }}
-    #     body_path: CHANGELOG.md
-    #     token: ${{ github.token }}
-
-      # with:
-      #   draft: false
-      #   prerelease: true
-      #   name: beta-${{ github.run_number }}
-      #   files: ./dist/sarlib.min.js
-      #   # tag_name: ${{ steps.changelog.outputs.tag }}
-      #   tag_name: beta-${{ github.run_number }}
-      #   body_path: CHANGELOG.md
-      #   token: ${{ github.token }}
-        
+        TYPE_ARG: ${{ fromJSON('{"auto":"", "patch":":patch", "minor":":minor", "major":":major"}')[github.event.inputs.type] }}
+      run: npm run release$TYPE_ARG
+       
 
     - name: Delete Older Releases
       uses: dev-drprasad/delete-older-releases@v0.2.1
@@ -98,15 +60,6 @@ jobs:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ github.token }}
-
-    # - name: Delete Older Releases
-    #   uses: actions/delete-package-versions@v4.1.1
-    #   with:
-    #     package-name: '@500historias/sarlib'
-    #     min-versions-to-keep: 3
-    #     package-type: npm
-    #     delete-only-pre-release-versions: "true"
-    #     token: ${{ secrets.GITHUB_TOKEN }}
     
 
 
