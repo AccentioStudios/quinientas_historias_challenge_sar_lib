@@ -59,11 +59,11 @@ Para casos de desarrollo, es probable que necesites datos de prueba, para estos 
 ### Entendiendo mejor los parametros de la URL
 Los parametros que van a ser mandados a tu aplicación van a provenir automaticamente desde la plataforma del SAR. Estos parametros son los siguientes:
 
- - *userId* (obligatorio): El id del usuario que está jugando.
- - *storyId*: El id de la historia que está relacionada al reto, en caso de haber.
- - *readEnded*: Tiempo en el que el usuario terminó de leer la historia.
- - *readInit*: Tiempo en el que el usuario empezó a leer la historia.
- - *testMode*: Indica si la libreria debe ser inicializada en modo de pruebas.
+ - **userId** (obligatorio): El id del usuario que está jugando.
+ - **storyId**: El id de la historia que está relacionada al reto, en caso de haber.
+ - **readEnded**: Tiempo en el que el usuario terminó de leer la historia.
+ - **readInit**: Tiempo en el que el usuario empezó a leer la historia.
+ - **testMode**: Indica si la libreria debe ser inicializada en modo de pruebas.
 
 
 ### Obtener información del usuario
