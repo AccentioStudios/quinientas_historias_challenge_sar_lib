@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:  
     - name: Checkout code
@@ -18,10 +21,19 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: git config
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
     - name: Setup Node.js environment
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '18.12.1'
+        cache: npm
+
+    - name: npm credentials
+      run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
 
     - name: Install dependencies
       run: npm install
@@ -29,26 +41,26 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Bump version
-      uses: TriPSs/conventional-changelog-action@v3.18.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        preset: 'conventionalcommits'
-        git-message: 'chore(release): {version}'
-        tag-prefix: 'v'
-        output-file: 'CHANGELOG.md'
-        skip-on-empty: false
+    # - name: Bump version
+    #   uses: TriPSs/conventional-changelog-action@v3.18.0
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     preset: 'conventionalcommits'
+    #     git-message: 'chore(release): {version}'
+    #     tag-prefix: 'v'
+    #     output-file: 'CHANGELOG.md'
+    #     skip-on-empty: false
 
-    - name: Publish Release
-      uses: softprops/action-gh-release@v0.1.15
-      with:
-        draft: false
-        prerelease: false
-        name: build-${{ github.run_number }}
-        files: ./dist/sarlib.min.js
-        tag_name: build-${{ github.run_number }}
-        body_path: CHANGELOG.md
-        token: ${{ github.token }}
+    # - name: Publish Release
+    #   uses: softprops/action-gh-release@v0.1.15
+    #   with:
+    #     draft: false
+    #     prerelease: false
+    #     name: build-${{ github.run_number }}
+    #     files: ./dist/sarlib.min.js
+    #     tag_name: build-${{ github.run_number }}
+    #     body_path: CHANGELOG.md
+    #     token: ${{ github.token }}
 
       # with:
       #   draft: false
