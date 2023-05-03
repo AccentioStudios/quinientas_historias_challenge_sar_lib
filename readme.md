@@ -39,6 +39,33 @@ Este método toma como argumento una función de retorno que se ejecutará despu
         console.log(user);
     });
 ```
+
+### Recibiendo parametros de la URL
+Al momento de inicializar sarlib, automaticamente se va a ejecutar el metodo parseQueryParams(), el cual va a obtener los parametros de la URL y los va a guardar. 
+
+Para obtener los parametros de la URL, puedes usar el metodo getQueryParam('queryParameter').
+
+```js
+    const params = sarlib.getQueryParam('userId');
+```
+
+### Test Mode
+Para casos de desarrollo, es probable que necesites datos de prueba, para estos casos sarlib automaticamente va a detectar el queryParameter 'testMode'. En caso de ser 'true', la libreria va a ser inicializada en modo de pruebas.
+
+```js
+    'http://localhost:3000/?userId=9999&testMode=true'
+```
+
+### Entendiendo mejor los parametros de la URL
+Los parametros que van a ser mandados a tu aplicación van a provenir automaticamente desde la plataforma del SAR. Estos parametros son los siguientes:
+
+ - userId (obligatorio): El id del usuario que está jugando.
+ - storyId: El id de la historia que está relacionada al reto, en caso de haber.
+ - readEnded: Tiempo en el que el usuario terminó de leer la historia.
+ - readInit: Tiempo en el que el usuario empezó a leer la historia.
+ - testMode: Indica si la libreria debe ser inicializada en modo de pruebas.
+
+
 ### Obtener información del usuario
 El callback de la funcion init() retorna los datos del usuario. Sin embargo puedes hacer la peticion nuevamente con el método getUser(). Este método devuelve una promesa que se resuelve con el objeto del usuario.
 
