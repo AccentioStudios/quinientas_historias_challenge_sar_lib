@@ -1,15 +1,14 @@
 name: Build and Release
-
-on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'package.json'
-      - 'CHANGELOG.md'
+on: workflow_dispatch
+  # push:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - 'package.json'
+  #     - 'CHANGELOG.md'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -26,20 +25,27 @@ jobs:
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
+    - name: npm credentials
+      run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+      
     - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
         node-version: '18.12.1'
         cache: npm
 
-    - name: npm credentials
-      run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
 
     - name: Install dependencies
       run: npm install
 
     - name: Build
       run: npm run build
+
+    - name: Run Release
+      run: npm run release -ci
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
 
     # - name: Bump version
     #   uses: TriPSs/conventional-changelog-action@v3.18.0
@@ -80,12 +86,6 @@ jobs:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Publish package on NPM 📦
-      run: npm publish --access public
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     # - name: Delete Older Releases
     #   uses: actions/delete-package-versions@v4.1.1
