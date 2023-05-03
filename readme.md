@@ -53,7 +53,7 @@ Para obtener los parametros de la URL, puedes usar el metodo getQueryParam('quer
 Para casos de desarrollo, es probable que necesites datos de prueba, para estos casos sarlib automaticamente va a detectar el queryParameter 'testMode'. En caso de ser 'true', la libreria va a ser inicializada en modo de pruebas.
 
 ```js
-    'http://localhost:3000/?userId=9999&testMode=true'
+    'http://{url-de-tu-app}/?userId=9999&testMode=true'
 ```
 
 ### Entendiendo mejor los parametros de la URL
