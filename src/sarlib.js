@@ -1,42 +1,42 @@
+'use strict';
+
 import Toastify from 'toastify-js'
+import { extend } from './utils.js';
+import ImagesBase64 from './images-base64.js';
+// SARLIB v1.0.0-beta Copyright (c) 2023-present 500Historias and Collaborators
 
 /**
- * SARLIB v1.0.0-beta
+ * SARLIB v1.0.0-beta Copyright (c) 2023-present 500Historias and Collaborators
  * Clase para manejar todas las peticiones a la API del SAR
- * @param {object} config - Objeto con la configuracion de la API (uuid, secretKey)
- * @param {string} url - URL del api, en caso de no usar el default (optional)
- * @returns {object} - Instancia de la clase SarLib
- *
- * @example
- * const sar = new SarLib({'xxx-xxx-xxx-xxx-xxx', 'secretKey', 'urlApi'});
- * sar.init((user) => {
- *  console.log(user);
- * });
- */
-
-export default class SarLib {
-  constructor({uuid, secretKey}, url) {
+*/
+class SarLib {
+  constructor() {
     this.initialized = false;
-    this.secretKey = secretKey;
-    this.challengeUUID = uuid;
+    this.secretKey = null;
+    this.challengeUUID = null;
     this.queryParams = [];
-    this.urlApi = url || "https://500h-sar-dev.accentiostudios.com";
+    this.urlApi = "https://sarapi.500historias.com";
     this.user = null;
     this.testMode;
   }
 
   /**
   * Inicializa la libreria, obtiene el usuario y lo retorna en el callback
+  * @param {object} config - Objeto con la configuracion de la API (uuid, secretKey, url(optional))
   * @param {object} callback - Funcion que se ejecuta al terminar de inicializar, retorna el usuario (optional)
+  * @returns {object} - Instancia de la clase SarLib
   *
   * @example
-  * sar.init((user) => {
+  * sar.init({'uuid', 'secretKey'}, (user) => {
   *   console.log(user);
   * });
   */
-  async init(callback) {
+  async init({uuid, secretKey, url = "https://sarapi.500historias.com"}, callback) {
     try {
-      let context = this;
+      this.secretKey = secretKey;
+      this.challengeUUID = uuid;
+      this.urlApi = url || "https://sarapi.500historias.com";
+
       this.createLoadingScreen();
       this.removeErrorScreen();
       this.parseQueryParams();
@@ -54,6 +54,8 @@ export default class SarLib {
           this.removeLoadingScreen();
           callback(this.user);
       }, 2000);
+
+      return this;
     } catch(error) {
       this.createErrorScreen('Error al inicializar. Carga nuevamente el juego.');
       throw error;
@@ -432,5 +434,22 @@ export default class SarLib {
       onClick: function(){} // Callback after click
     }).showToast();
   }
-
 }
+
+function createInstance() {
+  const instance = new SarLib();
+  
+  // Copy SarLib.prototype to context 
+  extend(instance, SarLib.prototype, null, {allOwnKeys: true});
+
+  return instance;
+}
+
+// Create the default instance to be exported
+const sarLib = createInstance();
+// Expose class to allow class inheritance
+sarLib.SarLib = SarLib;
+
+sarLib.default = sarLib;
+
+export default sarLib;

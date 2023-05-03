@@ -11,27 +11,31 @@ Para utilizar la librería, primero debes importar la libreria en tu proyecto. P
 
 Usando el CDN de Unpkg:
 ``` html
-    <script src="https://unpkg.com/@500historias/sarlib@1.0.3/dist/sarlib.min.js"></script>
+    <script src="https://unpkg.com/@500historias/sarlib@latest"></script>
 ```
+
+Importandolo en Node.js:
+``` js
+    // commonjs
+    const sarlib = require('@500historias/sarlib');
+
+    // ESM
+    import sarlib from '@500historias/sarlib';
+```
+
 ### Inicializar la librería
-Para inicializar la librería, debes instanciar la clase SarLib. La clase toma como argumento un objeto de configuración con las siguientes propiedades:
+Para inicializar la librería, debes usar el metodo init() de la instancia SarLib. El metodo toma como argumento un objeto de configuración con las siguientes propiedades:
 
  - uuid: Identificador único de la solicitud de autenticación.
  - secretKey: Clave secreta proporcionada por SAR.
+ - url: URL de la API de SAR (opcional).
 
-Como segundo parametro esta el url (opcional). Este URL es para conectar con el API de SAR en caso de querer apuntar a otro destino que no sea el que es por defecto.
+Como tercer parametro esta el url (opcional). Este URL es para conectar con el API de SAR en caso de querer apuntar a otro destino que no sea el que es por defecto.
 
-```js
-    const sar = new SarLib({
-            uuid: 'xxx-xxx-xxx-xxx-xxx', 
-            secretKey: 'secretKey'
-        }, 'urlApi');
-```
-
-Después, puedes llamar al método init() para inicializar la librería. Este método toma como argumento una función de retorno que se ejecutará después de que se complete la inicialización. La función de retorno recibirá el objeto del usuario como argumento.
+Este método toma como argumento una función de retorno que se ejecutará después de que se complete la inicialización. La función de retorno recibirá el objeto del usuario como argumento.
 
 ```js
-    sar.init((user) => {
+    sarlib.init({'uuid', 'secretKey'}, (user) => {
         console.log(user);
     });
 ```
@@ -39,7 +43,7 @@ Después, puedes llamar al método init() para inicializar la librería. Este m�
 El callback de la funcion init() retorna los datos del usuario. Sin embargo puedes hacer la peticion nuevamente con el método getUser(). Este método devuelve una promesa que se resuelve con el objeto del usuario.
 
 ```js
-sar.getUser()
+sarlib.getUser()
   .then((user) => {
     console.log(user);
   })
@@ -53,7 +57,7 @@ sar.getUser()
 Puedes terminar un reto llamando al método finishChallenge(). Este método toma un argumento booleano que indica si el reto fue exitoso o no.
 
 ```js
-sar.finishChallenge(true)
+sarlib.finishChallenge(true)
   .then(() => {
     console.log('Reto terminado exitosamente');
   })
@@ -66,13 +70,9 @@ sar.finishChallenge(true)
 Puedes terminar un paso en un reto con pasos llamando al método addStep(). Este método devuelve una promesa que se resuelve con un objeto con una propiedad success que indica si el paso fue exitoso o no.
 
 ```js
-sar.addStep()
+sarlib.addStep()
   .then((response) => {
-    if (response.success) {
       console.log('Paso terminado exitosamente');
-    } else {
-      console.log('Error al terminar el paso');
-    }
   })
   .catch((error) => {
     console.log(error);
