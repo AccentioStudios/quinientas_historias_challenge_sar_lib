@@ -1,16 +1,23 @@
 {
-    "git": {
-      "requireBranch": "main",
-      "commitMessage": "chore: release v${version}"
-    },
-    "hooks": {
-        "before:init": ["git pull"],
-        "after:bump": "npx auto-changelog -p"
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": true
+  "git": {
+    "requireBranch": "main",
+    "commitMessage": "chore: release v${version}"
+  },
+  "hooks": {
+    "before:init": [
+      "git pull"
+    ],
+    "after:bump": "npx auto-changelog -p",
+    "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+  },
+  "github": {
+    "release": true
+  },
+  "npm": {
+    "publish": true,
+    "ignoreVersion": false,
+    "publishConfig": {
+      "access": "public"
     }
   }
+}
