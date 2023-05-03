@@ -299,7 +299,7 @@ class SarLib {
     splashScreen.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
 
-        <img src="/images/sar_loading.gif" style="width: 180px; height: 180px;">
+        <img src="${ImagesBase64.loadingAnimation}" style="width: 180px; height: 180px;">
         <h1 style="color: white; font-size: 18px; margin-top: 18px;">Cargando...</h1>
       </div>
       
@@ -366,7 +366,7 @@ class SarLib {
     errorScreen.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
 
-        <img src="/images/bug-error-image.svg" style="width: 120px; height: 120px;">
+        <img src="${ImagesBase64.errorImage}" style="width: 120px; height: 120px;">
         <h1 style="color: white; font-size: 20px; margin-top: 24px; text-align:center;">Oops...</h1>
         <h3 style="color: white; font-size: 16px; margin-top: 0px; text-align:center; font-weight: 400;">${message}</h3>
       </div>
