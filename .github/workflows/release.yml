@@ -1,5 +1,16 @@
 name: Build and Release
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      type:
+        type: choice
+        description: Choose release type
+        options:
+          - auto
+          - patch
+          - minor
+          - major
+        default: auto
   # push:
   #   branches:
   #     - main
@@ -42,9 +53,10 @@ jobs:
       run: npm run build
 
     - name: Run Release
-      run: npm run release -ci
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TYPE_ARG: ${{ fromJSON('{"auto":"", "patch":"--patch", "minor":"--minor", "major":"--major"}')[github.event.inputs.type] }}
+      run: npm run release --ci --verbose $TYPE_ARG
       
 
     # - name: Bump version
