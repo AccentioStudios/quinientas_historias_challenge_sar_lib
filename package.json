@@ -1,6 +1,6 @@
 {
   "name": "@500historias/sarlib",
-  "version": "1.0.26",
+  "version": "1.1.0",
   "description": "library for connecting an application to the SAR",
   "main": "dist/sarlib.cjs.js",
   "module": "dist/sarlib.esm.js",
