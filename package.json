@@ -2,36 +2,33 @@
   "name": "@500historias/sarlib",
   "version": "1.0.7",
   "description": "library for connecting an application to the SAR",
-  "main": "index.js",
-  "scripts": {
-    "build": "webpack --mode production",
-    "version": "npm version prerelease --preid build",
-    "publish": "npm publish --tag beta --access public"
-  },
+  "main": "dist/sarlib.cjs.js",
+  "module": "dist/sarlib.esm.js",
+  "browser": "dist/sarlib.umd.js",
+  "homepage": "https://500historias.com",
   "keywords": [
     "SAR",
     "package",
     "500Historias"
   ],
+  "type": "module",
   "author": "Accentio Studios <hellodev@accentiostudios.com>",
-  "license": "ISC",
   "dependencies": {
-    "semver": "^7.5.0",
     "toastify-js": "^1.12.0"
   },
-  "type": "module",
   "devDependencies": {
-    "semver": "^7.3.7",
-    "@babel/core": "^7.21.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.21.5",
-    "@babel/preset-env": "^7.21.5",
-    "@rollup/plugin-babel": "^6.0.3",
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.7.3",
-    "css-minimizer-webpack-plugin": "^5.0.0",
-    "mini-css-extract-plugin": "^2.7.5",
-    "terser-webpack-plugin": "^5.3.7",
-    "webpack": "^5.81.0",
-    "webpack-cli": "^5.0.2"
-  }
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-terser": "^0.4.1",
+    "rollup": "^3.21.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "node test/test.js",
+    "pretest": "npm run build"
+  },
+  "files": [
+    "dist"
+  ]
 }
