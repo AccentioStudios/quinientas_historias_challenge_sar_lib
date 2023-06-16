@@ -24,6 +24,11 @@
     "release-it": "^15.10.3",
     "rollup": "^3.21.3"
   },
+  "before:init": [
+    "npm install",
+    "npm run build",
+    "git update-index -q --refresh"
+  ],
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
