@@ -4,14 +4,12 @@
   "description": "library for connecting an application to the SAR",
   "main": "dist/sarlib.cjs.js",
   "module": "dist/sarlib.esm.js",
-  "browser": "dist/sarlib.umd.js",
   "homepage": "https://500historias.com",
   "keywords": [
     "SAR",
     "package",
     "500Historias"
   ],
-  "type": "module",
   "author": "Accentio Studios <hellodev@accentiostudios.com>",
   "dependencies": {
     "toastify-js": "^1.12.0"

@@ -1,121 +1,24 @@
-'use strict';
+import { extend } from './utils.mjs';
 
-import Toastify from 'toastify-js'
-import { extend } from './utils.js';
-import ImagesBase64 from './images-base64.js';
-const { detect } = require('detect-browser');
 // SARLIB v1.0.0-beta Copyright (c) 2023-present 500Historias and Collaborators
 
 /**
  * SARLIB v1.0.0-beta Copyright (c) 2023-present 500Historias and Collaborators
  * Clase para manejar todas las peticiones a la API del SAR
+ * @param {string} options.uuid - UUID del reto
+ * @param {string} options.secretKey - Llave secreta del reto
+ * @param {object} options.testMode - Modo de prueba
 */
 class SarLib {
-  constructor() {
-    this.initialized = false;
-    this.secretKey = null;
-    this.challengeUUID = null;
-    this.params = [];
+  constructor({uuid, secretKey, testMode}) {
+    this.initialized = true;
+    this.secretKey = secretKey;
+    this.challengeUUID = uuid;
     this.urlApi = "https://sarapi.500historias.com";
     this.user = null;
-    this.testMode;
+    this.testMode = testMode ?? false;
     this.browser = false;
   }
-
-  /**
-  * Inicializa la libreria, obtiene el usuario y lo retorna en el callback
-  * @param {object} config - Objeto con la configuracion de la API (uuid, secretKey, url(optional))
-  * @param {object} callback - Funcion que se ejecuta al terminar de inicializar, retorna el usuario (optional)
-  * @returns {object} - Instancia de la clase SarLib
-  *
-  * @example
-  * sar.init({'uuid', 'secretKey'}, (user) => {
-  *   console.log(user);
-  * });
-  */
-
-  async verifyIfIsBrowser() {
-    const browser = detect();
-    if(browser) {
-      this.browser = true;
-    }
-  }
-
-  async init({uuid, secretKey, options, url = "https://sarapi.500historias.com"}, callback) {
-    try {
-      if(document != undefined) {
-        this.browser = true;
-      }
-
-      this.secretKey = secretKey;
-      this.challengeUUID = uuid;
-      this.urlApi = url || "https://sarapi.500historias.com";
-
-      if(this.browser) {
-        this.createLoadingScreen();
-        this.removeErrorScreen();
-      }
-      this.parseParams(options);
-      const testMode = this.getQueryParam("testMode") === 'true';
-      this.testMode = testMode;
-      
-      setTimeout(async () => {
-        const responses = await Promise.all([
-          this.getUser(),
-        ]).catch(error => {
-          this.createErrorScreen(error.message);
-          throw error;
-        });
-          this.initialized = true;
-          this.removeLoadingScreen();
-          callback(this.user);
-      }, 2000);
-
-      return this;
-    } catch(error) {
-      if(this.browser) {
-        this.createErrorScreen('Error al inicializar. Carga nuevamente el juego.');
-      }
-      throw error;
-    }
-  }
-
-  /**
-   * Metodo parsear los parametros de la URL y los guarda dentro de SarLib.queryParams;
-   * @example
-   * sar.parseQueryParams();
-   */
-  parseParams({userId, storyId ,testMode}) {
-    if(this.browser) {
-      const searchParams = new URLSearchParams(window.location.search);
-      for (const [key, value] of searchParams) {
-        this.params[encodeURIComponent(key)] = encodeURIComponent(value);
-      }
-    } else {
-      if(userId) this.params[userId] = userId;
-      if(storyId) this.params[storyId] = storyId;
-      if(testMode) this.params[testMode] = testMode;
-    }
-  }
-  /**
-   * Metodo para obtener un parametro de la URL
-   * @param {string} paramName - Nombre del parametro a obtener
-   * @returns {string} - Valor del parametro
-   * @example
-   * sar.getQueryParam('userId');
-   * // returns '123456'
-   * @example
-   * sar.getQueryParam('testMode');
-   * // returns 'true'
-   */
-  getQueryParam(paramName) {
-    const paramValue = this.params[encodeURIComponent(paramName)];
-    if (paramValue !== null) {
-      return encodeURIComponent(paramValue);
-    }
-    return '';
-  }
-    
     
   /**
   * Metodo para obtener todos los el usuario
@@ -124,9 +27,9 @@ class SarLib {
   * const user = await sar.getUser();
   * // returns User
   */
-    async getUser() {
+    async getUser(userId) {
       try {
-        const userId = this.getQueryParam("userId");
+        const currentUserId = userId;
         let myHeaders = new Headers();
         myHeaders.append("sar-secret-key", this.secretKey);
         myHeaders.append("sar-challenge-uuid", this.challengeUUID);
@@ -136,14 +39,14 @@ class SarLib {
           headers: myHeaders,
           redirect: 'follow'
         };
-        const response = await fetch(`${this.urlApi}/v1/challenge/user?id=${userId}`, requestOptions);
+        const response = await fetch(`${this.urlApi}/v1/challenge/user?id=${currentUserId}`, requestOptions);
         if(response) {
           if(response.ok) {
               const data = await response.json();
               this.user = data;
               return data;
           } else {
-            this.toaster('Status Code: ' + response.status)
+
             throw new Error('Error en la respuesta del servidor.');
           }
         }
@@ -163,12 +66,18 @@ class SarLib {
    * const response = await sar.addStep();
    * // returns {success: true}
    */
-  addStep() {
-    this.retryIfNotDone(async () => {
-      const response = await fetch(`${this.urlApi}/v1/challenge/add-step`);
-      const data = await response.json();
-      return data;
-    });
+  addStep(userId) {
+    try {
+      return this.sendRequest('/v1/challenge/add-step', {
+        method: 'POST',
+        body: {
+          userId: userId,
+          uuid: this.challengeUUID,
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
 
@@ -194,28 +103,17 @@ class SarLib {
   * sar.finishChallenge(true);
   * // returns true
   */
-  async finishChallenge(success) {
-    var isMobile = this.getQueryParam('isMobile') === 'true';
+  async finishChallenge(userId, success) {
     try {
-      this.createLoadingScreen();
-      await this.sendRequest('/v1/challenge/finish', {
+      return this.sendRequest('/v1/challenge/finish', {
         method: 'POST',
         body: {
-          userId: this.user.id,
+          userId: userId,
           uuid: this.challengeUUID,
           success: success
         }
       });
-      this.createSuccessScreen(success);
-      this.removeLoadingScreen();
-      // wait 2 seconds for close the web view
-      await new Promise(resolve => setTimeout(() => {
-        this.closeWebView(success);
-        resolve();
-      }, 2000));
     } catch (error) {
-      this.removeLoadingScreen();
-      // this.createErrorScreen(error.message);
       throw error;
     }
   }
@@ -232,7 +130,6 @@ class SarLib {
    * });
   */
   async retryIfNotDone(func) {
-    this.removeErrorScreen();
     let count = 0;
     while (count < 3) {
       const result = await func();
@@ -243,7 +140,6 @@ class SarLib {
         await new Promise(resolve => setTimeout(resolve, 3000));
       }
     }
-    this.createErrorScreen('Se ha intentado 3 veces y no se ha podido realizar la operación');
     throw new Error('Se ha intentado 3 veces y no se ha podido realizar la operación');
   }
 
@@ -267,7 +163,6 @@ class SarLib {
   */
   async sendRequest(endpoint, options = {}) {
     const urlApi = this.urlApi;
-    this.removeErrorScreen();
 
     const headers = {
       'Content-Type': 'application/json',
@@ -293,7 +188,7 @@ class SarLib {
           throw new Error('Error en la respuesta del servidor.');
         }
       } catch (error) {
-        this.toaster(error.message);
+
         throw new Error(error);
       }
     });
@@ -435,33 +330,10 @@ class SarLib {
       splashScreen.parentNode.removeChild(splashScreen);
     }
   }
-
-  /**
-   * Metodo para mostrar un toast
-   * @param {string} message - Mensaje del toast
-   * @example
-   * sar.toaster('Este es un toast');
-  */
-  toaster(message) {
-    Toastify({
-      text: message || "This is a toast",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "left", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      style: {
-        background: "#930006",
-        color: "#FFDAD4",
-      },
-      onClick: function(){} // Callback after click
-    }).showToast();
-  }
 }
 
-function createInstance() {
-  const instance = new SarLib();
+function createInstance({uuid, secretKey, testMode}) {
+  const instance = new SarLib({uuid: uuid, secretKey: secretKey, testMode: testMode});
   
   // Copy SarLib.prototype to context 
   extend(instance, SarLib.prototype, null, {allOwnKeys: true});
@@ -469,11 +341,10 @@ function createInstance() {
   return instance;
 }
 
-// Create the default instance to be exported
-const sarLib = createInstance();
-// Expose class to allow class inheritance
-sarLib.SarLib = SarLib;
-
-sarLib.default = sarLib;
-
-export default sarLib;
+SarLib.useExpress = ({uuid, secretKey, testMode}) => (req, res, next) => {
+  // Create the default instance to be exported
+  const sarLib = createInstance({uuid: uuid, secretKey: secretKey, testMode: testMode});
+  req.sar = sarLib;
+  next();
+};
+export default SarLib;

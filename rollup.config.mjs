@@ -4,33 +4,6 @@ import terser from '@rollup/plugin-terser';
 import babel from '@rollup/plugin-babel';
 import pkg from './package.json' assert { type: "json" };
 export default [
-	// browser-friendly UMD build
-	{
-		input: 'src/main.js',
-		output: {
-			name: 'sarlib',
-			file: pkg.browser,
-			format: 'umd',
-			sourcemap: true,
-		},
-		plugins: [
-			nodeResolve({
-				jsnext: true,
-				main: true,
-				browser: true
-			}),
-			commonjs({
-				include: 'node_modules/**',
-				extensions: [ '.js', '.cjs' ],
-				ignoreGlobal: false,
-			}),
-			babel({
-				exclude: 'node_modules/**',
-			}),
-			terser(),
-		]
-	},
-
 	// CommonJS (for Node) and ES module (for bundlers) build.
 	// (We could have three entries in the configuration array
 	// instead of two, but it's quicker to generate multiple
@@ -38,8 +11,7 @@ export default [
 	// an array for the `output` option, where we can specify
 	// `file` and `format` for each target)
 	{
-		input: 'src/main.js',
-		external: ['toastify-js'],
+		input: 'src/sarlib.mjs',
 		output: [
 			{ file: pkg.main, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
