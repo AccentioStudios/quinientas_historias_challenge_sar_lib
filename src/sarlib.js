@@ -3,6 +3,7 @@
 import Toastify from 'toastify-js'
 import { extend } from './utils.js';
 import ImagesBase64 from './images-base64.js';
+const { detect } = require('detect-browser');
 // SARLIB v1.0.0-beta Copyright (c) 2023-present 500Historias and Collaborators
 
 /**
@@ -14,10 +15,11 @@ class SarLib {
     this.initialized = false;
     this.secretKey = null;
     this.challengeUUID = null;
-    this.queryParams = [];
+    this.params = [];
     this.urlApi = "https://sarapi.500historias.com";
     this.user = null;
     this.testMode;
+    this.browser = false;
   }
 
   /**
@@ -31,18 +33,32 @@ class SarLib {
   *   console.log(user);
   * });
   */
-  async init({uuid, secretKey, url = "https://sarapi.500historias.com"}, callback) {
+
+  async verifyIfIsBrowser() {
+    const browser = detect();
+    if(browser) {
+      this.browser = true;
+    }
+  }
+
+  async init({uuid, secretKey, options, url = "https://sarapi.500historias.com"}, callback) {
     try {
+      if(document != undefined) {
+        this.browser = true;
+      }
+
       this.secretKey = secretKey;
       this.challengeUUID = uuid;
       this.urlApi = url || "https://sarapi.500historias.com";
 
-      this.createLoadingScreen();
-      this.removeErrorScreen();
-      this.parseQueryParams();
+      if(this.browser) {
+        this.createLoadingScreen();
+        this.removeErrorScreen();
+      }
+      this.parseParams(options);
       const testMode = this.getQueryParam("testMode") === 'true';
       this.testMode = testMode;
-
+      
       setTimeout(async () => {
         const responses = await Promise.all([
           this.getUser(),
@@ -57,7 +73,9 @@ class SarLib {
 
       return this;
     } catch(error) {
-      this.createErrorScreen('Error al inicializar. Carga nuevamente el juego.');
+      if(this.browser) {
+        this.createErrorScreen('Error al inicializar. Carga nuevamente el juego.');
+      }
       throw error;
     }
   }
@@ -67,12 +85,18 @@ class SarLib {
    * @example
    * sar.parseQueryParams();
    */
-  parseQueryParams() {
-    const searchParams = new URLSearchParams(window.location.search);
-    for (const [key, value] of searchParams) {
-        this.queryParams[encodeURIComponent(key)] = encodeURIComponent(value);
+  parseParams({userId, storyId ,testMode}) {
+    if(this.browser) {
+      const searchParams = new URLSearchParams(window.location.search);
+      for (const [key, value] of searchParams) {
+        this.params[encodeURIComponent(key)] = encodeURIComponent(value);
       }
+    } else {
+      if(userId) this.params[userId] = userId;
+      if(storyId) this.params[storyId] = storyId;
+      if(testMode) this.params[testMode] = testMode;
     }
+  }
   /**
    * Metodo para obtener un parametro de la URL
    * @param {string} paramName - Nombre del parametro a obtener
@@ -85,7 +109,7 @@ class SarLib {
    * // returns 'true'
    */
   getQueryParam(paramName) {
-    const paramValue = this.queryParams[encodeURIComponent(paramName)];
+    const paramValue = this.params[encodeURIComponent(paramName)];
     if (paramValue !== null) {
       return encodeURIComponent(paramValue);
     }

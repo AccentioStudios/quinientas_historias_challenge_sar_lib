@@ -18,7 +18,10 @@ export default [
 				browser: true,
 				ignoreGlobal: false,
 			}),
-			commonjs(),
+			commonjs({
+				extensions: [ '.js', '.cjs' ],
+				ignoreGlobal: false,
+			}),
 			terser(),
 		]
 	},
@@ -35,6 +38,10 @@ export default [
 		output: [
 			{ file: pkg.main, format: 'cjs' },
 			{ file: pkg.module, format: 'es' }
+		],
+		plugins: [
+			commonjs(),
+			terser(),
 		]
 	}
 ];
