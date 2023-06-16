@@ -1,8 +1,8 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
+import babel from '@rollup/plugin-babel';
 import pkg from './package.json' assert { type: "json" };
-
 export default [
 	// browser-friendly UMD build
 	{
@@ -15,12 +15,17 @@ export default [
 		},
 		plugins: [
 			nodeResolve({
-				browser: true,
-				ignoreGlobal: false,
+				jsnext: true,
+				main: true,
+				browser: true
 			}),
 			commonjs({
+				include: 'node_modules/**',
 				extensions: [ '.js', '.cjs' ],
 				ignoreGlobal: false,
+			}),
+			babel({
+				exclude: 'node_modules/**',
 			}),
 			terser(),
 		]
@@ -40,7 +45,14 @@ export default [
 			{ file: pkg.module, format: 'es' }
 		],
 		plugins: [
-			commonjs(),
+			commonjs({
+				include: 'node_modules/**',
+				extensions: [ '.js', '.cjs' ],
+				ignoreGlobal: false,
+			}),
+			babel({
+				exclude: 'node_modules/**',
+			}),
 			terser(),
 		]
 	}

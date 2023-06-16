@@ -14,6 +14,7 @@
   "type": "module",
   "author": "Accentio Studios <hellodev@accentiostudios.com>",
   "dependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
     "toastify-js": "^1.12.0"
   },
   "devDependencies": {
