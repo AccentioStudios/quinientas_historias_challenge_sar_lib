@@ -14,7 +14,7 @@ class SarLib {
     this.initialized = true;
     this.secretKey = secretKey;
     this.challengeUUID = uuid;
-    this.urlApi = "https://sarapi.500historias.com";
+    this.urlApi = "https://500h-sar-dev.accentiostudios.com";
     this.user = null;
     this.testMode = testMode ?? false;
     this.browser = false;
