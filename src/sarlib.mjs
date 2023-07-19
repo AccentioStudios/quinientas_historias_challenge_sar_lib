@@ -185,11 +185,10 @@ class SarLib {
         if (response.ok) {
           data = await response.json();
         } else {
-          throw new Error('Error en la respuesta del servidor.');
+          throw new Error(`Message: ${response.message} - Status: ${response.status} - StatusText: ${response.statusText}`);
         }
       } catch (error) {
-
-        throw new Error(error);
+        throw error;
       }
     });
 
