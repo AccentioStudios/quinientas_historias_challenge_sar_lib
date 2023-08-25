@@ -27,37 +27,45 @@ class SarLib {
   * const user = await sar.getUser();
   * // returns User
   */
-    async getUser(userId) {
-      try {
-        const currentUserId = userId;
-        let myHeaders = new Headers();
-        myHeaders.append("sar-secret-key", this.secretKey);
-        myHeaders.append("sar-challenge-uuid", this.challengeUUID);
-        myHeaders.append("sar-test-mode", this.testMode.toString());
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
-        const response = await fetch(`${this.urlApi}/v1/challenge/user?id=${currentUserId}`, requestOptions);
-        if(response) {
-          if(response.ok) {
-              const data = await response.json();
-              this.user = data;
-              return data;
-          } else {
-
-            throw new Error('Error en la respuesta del servidor.');
-          }
+  async getUser(userId) {
+    try {
+      const currentUserId = userId;
+      let myHeaders = new Headers();
+      myHeaders.append("sar-secret-key", this.secretKey);
+      myHeaders.append("sar-challenge-uuid", this.challengeUUID);
+      myHeaders.append("sar-test-mode", this.testMode.toString());
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+      const response = await fetch(`${this.urlApi}/v1/challenge/user?id=${currentUserId}`, requestOptions);
+      if(response) {
+        if(response.status === 200) {
+            const data = await response.json();
+            this.user = data;
+            return data;
+        } 
+        else {
+          const data = await response.json();
+          return data;
         }
-      } catch(error) {
-        if(error instanceof Error) {
-          throw error;
-        }
-        throw new Error('Error al obtener informacion del usuario al inicializar.');
       }
+    } catch(error) {
+      if(error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Error al obtener informacion del usuario al inicializar.');
     }
+  }
 
+
+  makeErrorJsonMessage(message) {
+    return JSON.stringify({
+      error: true,
+      message: message
+    });
+  }
 
   /**
    * Metodo para terminar un paso en un reto con pasos
